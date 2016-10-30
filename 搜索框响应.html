@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<style type="text/css">
+    #sug{
+
+    position: absolute;
+    left: 50%;
+    margin-left: -150px;
+    width: 300px;
+    background: lightGreen;
+    height: 40px;
+    text-align: center;
+    }
+    #sug input{
+    margin-top: 10px;
+    }
+    #list{
+    position: absolute;
+    left: 50%;
+    top:50px;
+    width: 200px;
+    margin-left: -150px;
+    height: auto;
+    background: lightBlue;
+    display: none;
+    }
+    #list ul{
+    padding-left: 0px;
+    margin: 0px;
+    }
+    #list ul li{
+    background: lightGray;
+    line-height: 30px;
+    list-style: none;
+    padding-left: 10px;
+    margin-top: 0px;
+    cursor: pointer;
+    }
+    #list ul li.on{
+    background: lightGreen;
+    }
+</style>
+<body>
+<div id="sug">
+    <div>
+        <input type="text" id="keyWord" autocomplete=off>
+        <input type="button" value="百度一下" id="btn">
+    </div>
+</div>
+<div id="list"></div>
+</body>
+<script>
+
+        var kw = document.getElementById('keyWord');
+        kw.oninput = function () {
+            var code = kw.value;
+            $.ajax({
+                dataType:'jsonp',
+                jsonp:'cb',
+                url:'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd='+code,
+                success: function (data) {
+                    $('#list').show();
+                    if(code.length == 0){
+                        $('#list').hide();
+                    }
+                    var tag = '';
+                    tag += '<ul>';
+                    for(var i = 0;i < 6;i++){
+                        tag += '<li>' + data.s[i] + '</li>';
+                    }
+                    tag += '</ul>';
+                    $('#list').html(tag);
+                    $('#list').find('li').hover(
+                            function () {
+                                $(this).css('backgroundColor','maroon');
+                            }, function () {
+                                $(this).css('backgroundColor','orange');
+                            })
+                }
+            })
+        };
+
+</script>
+</html>
